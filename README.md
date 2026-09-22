@@ -46,8 +46,23 @@ Proyek ini adalah implementasi sistem manajemen terintegrasi untuk **Dual-Node D
 
 ---
 
-## Panduan Deployment ke Server Linux Production
+## Quick Deploy ke Server Linux (via GitHub)
 
-Untuk panduan lengkap langkah demi langkah deploy Web Panel, konfigurasi Nginx reverse proxy, SSL HTTPS, firewall, dan systemd service, silakan baca:
-👉 **[Panduan Lengkap Deployment Production (DEPLOYMENT_GUIDE.md)](docs/DEPLOYMENT_GUIDE.md)**
+```bash
+# 1. Clone repository ke direktori aplikasi
+sudo mkdir -p /opt/dns-panel && sudo chown -R $USER:$USER /opt/dns-panel
+git clone https://github.com/risky-budiman/dns-server-panel.git /opt/dns-panel
+cd /opt/dns-panel
+
+# 2. Pasang dependensi
+npm install --production
+
+# 3. Jalankan service background otomatis (systemd)
+sudo cp service/dns-panel.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now dns-panel
+```
+
+Untuk panduan lengkap langkah demi langkah deploy Web Panel, konfigurasi Nginx reverse proxy, SSL HTTPS, firewall, dan DNS BIND9, silakan baca:
+👉 **[Buku Panduan Lengkap Deployment Production (docs/DEPLOYMENT_GUIDE.md)](docs/DEPLOYMENT_GUIDE.md)**
 

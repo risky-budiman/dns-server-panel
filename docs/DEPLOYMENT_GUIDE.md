@@ -49,18 +49,27 @@ Pastikan server Anda memenuhi spesifikasi minimum berikut:
 
 ## 3. Panduan Deploy Web Control Panel (Utama)
 
-### Langkah 1: Upload File Proyek ke Server
-Di komputer lokal Anda, kompres atau transfer folder `DNS_Panel` ke server manajemen (misalnya ke direktori `/opt/dns-panel`):
+### Langkah 1: Clone Repository dari GitHub ke Server Production
+Masuk ke terminal server Linux (VPS / Baremetal) Anda via SSH, kemudian clone langsung dari repository GitHub ke direktori standar `/opt/dns-panel`:
 
 ```bash
-# Contoh upload via SCP dari laptop ke VPS
-scp -r "d:/AI Code/DNS_Panel" sysadmin@IP_SERVER_PANEL:/tmp/dns-panel
-
-# Di dalam VPS, pindahkan ke direktori standar /opt
-sudo mv /tmp/dns-panel /opt/dns-panel
+# Buat direktori aplikasi dan atur hak kepemilikan user Anda
+sudo mkdir -p /opt/dns-panel
 sudo chown -R $USER:$USER /opt/dns-panel
+
+# Clone repository langsung dari GitHub
+git clone https://github.com/risky-budiman/dns-server-panel.git /opt/dns-panel
+
+# Masuk ke direktori proyek
 cd /opt/dns-panel
 ```
+
+> [!TIP]
+> **Cara Update Kode Produksi (CI/CD Ringan via Git):**
+> Kapan pun Anda melakukan update di lokal dan melakukan `git push origin main`, Anda cukup memperbarui server produksi dengan satu baris perintah:
+> ```bash
+> cd /opt/dns-panel && git pull origin main && sudo systemctl restart dns-panel
+> ```
 
 ---
 
