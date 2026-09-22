@@ -1,0 +1,17 @@
+[ Isu Terdeteksi ]
+       │
+       ├─► [ Masalah: Pelanggan tidak bisa resolve internet ]
+       │        ├─ Cek status daemon: systemctl status named
+       │        ├─ Cek allow-recursion: Pastikan IP pelanggan masuk dalam acl "isp_clients"
+       │        └─ Cek forwarders: Pastikan upstream (1.1.1.1, 8.8.8.8) dapat dijangkau
+       │
+       ├─► [ Masalah: Secondary (NS2) tidak sync dengan Primary (NS1) ]
+       │        ├─ Cek error log: journalctl -u named -n 50
+       │        ├─ Validasi kesamaan secret pada /etc/bind/tsig.key di kedua node
+       │        ├─ Pastikan firewall membuka Port 53 TCP (wajib untuk transfer zone AXFR)
+       │        └─ Paksa transfer manual: rndc retransfer ispanda.net.id
+       │
+       └─► [ Masalah: Memory server membengkak saat update RPZ ]
+                ├─ Pastikan skrip parser tidak menggunakan `fs.readFileSync` ke memori variabel
+                ├─ Verifikasi skrip menggunakan `fs.createReadStream` + `readline`
+                └─ Batasi alokasi RAM Node.js: `node --max-old-space-size=512 sync.js`

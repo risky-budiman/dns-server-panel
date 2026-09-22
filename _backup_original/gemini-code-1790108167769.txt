@@ -1,0 +1,3 @@
+[ Fase 1: Perencanaan ] ──► [ Fase 2: Deployer Engine ] ──► [ Fase 3: RPZ Pipeline ]
+                                                                     │
+[ Fase 5: Operasional ] ◄── [ Fase 4: Integrasi Panel ] ◄────────────┘

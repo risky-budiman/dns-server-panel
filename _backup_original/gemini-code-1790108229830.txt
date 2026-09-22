@@ -1,0 +1,6 @@
+zone "ispanda.net.id" {
+    type primary;
+    file "/etc/bind/zones/db.ispanda.net.id";
+    allow-transfer { key "transfer-key"; };
+    notify yes;
+};

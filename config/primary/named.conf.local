@@ -1,0 +1,45 @@
+include "/etc/bind/tsig.key";
+
+server 103.100.50.3 {
+    keys { "transfer-key"; };
+};
+
+// VIEW INTERNAL: Resolving & RPZ Pelanggan
+view "internal-resolver" {
+    match-clients { "isp_clients"; };
+    recursion yes;
+    allow-recursion { "isp_clients"; };
+
+    forwarders {
+        1.1.1.1;
+        8.8.8.8;
+    };
+
+    response-policy {
+        zone "rpz.kominfo";
+        zone "rpz.custom.whitelist" policy passthru;
+    };
+
+    zone "rpz.kominfo" {
+        type primary;
+        file "/var/lib/bind/kominfo.rpz";
+        allow-transfer { key "transfer-key"; };
+        notify yes;
+    };
+
+    zone "rpz.custom.whitelist" {
+        type primary;
+        file "/var/lib/bind/custom_whitelist.rpz";
+    };
+
+    include "/etc/bind/authoritative.zones";
+};
+
+// VIEW EXTERNAL: Publik / Authoritative Murni
+view "external-authoritative" {
+    match-clients { any; };
+    recursion no;
+    allow-query { any; };
+
+    include "/etc/bind/authoritative.zones";
+};

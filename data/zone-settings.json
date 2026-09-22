@@ -1,0 +1,12 @@
+{
+  "domain": "ids.net.id",
+  "primaryNS": "ns1.he.net",
+  "secondaryNS": "ns2.rumahweb.com",
+  "hostmaster": "hostmaster.he.net",
+  "defaultTTL": 172800,
+  "refresh": 86400,
+  "retry": 7200,
+  "expire": 3600000,
+  "minTTL": 172800,
+  "serial": 2026061000
+}

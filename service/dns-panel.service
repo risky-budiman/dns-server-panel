@@ -1,0 +1,13 @@
+[Unit]
+Description=ISP DNS Control Center
+After=network.target named.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/dns-panel
+ExecStart=/usr/bin/node /opt/dns-panel/server.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

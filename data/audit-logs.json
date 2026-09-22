@@ -1,0 +1,198 @@
+[
+  {
+    "timestamp": "2026-09-22T21:47:52.494Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "RECORD_UPDATED",
+    "details": "Update record @ (MX) -> mail.ids.net.id"
+  },
+  {
+    "timestamp": "2026-09-22T21:47:47.263Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "RECORD_UPDATED",
+    "details": "Update record @ (MX) -> mail.ids.net.id."
+  },
+  {
+    "timestamp": "2026-09-22T21:47:41.822Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "RECORD_UPDATED",
+    "details": "Update record @ (MX) -> mail.ids.net.id"
+  },
+  {
+    "timestamp": "2026-09-22T21:47:29.434Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "RECORD_UPDATED",
+    "details": "Update record @ (NS) -> ns1.ids.net.id"
+  },
+  {
+    "timestamp": "2026-09-22T21:47:24.208Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "RECORD_UPDATED",
+    "details": "Update record @ (NS) -> ns1.he.net"
+  },
+  {
+    "timestamp": "2026-09-22T21:46:35.346Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "RECORD_ADDED",
+    "details": "Menambah record @ IN MX (TTL: 1800) mail.ids.net.id"
+  },
+  {
+    "timestamp": "2026-09-22T21:45:44.788Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "RECORD_ADDED",
+    "details": "Menambah record @ IN MX (TTL: 1800) mx1.hostinger.com"
+  },
+  {
+    "timestamp": "2026-09-22T21:45:43.234Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "USER_LOGIN",
+    "details": "Berhasil login ke dashboard control center"
+  },
+  {
+    "timestamp": "2026-09-22T21:43:48.110Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "USER_LOGIN",
+    "details": "Berhasil login ke dashboard control center"
+  },
+  {
+    "timestamp": "2026-09-22T21:41:14.167Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "RECORD_ADDED",
+    "details": "Menambah record ids.net.id IN NS (TTL: 1800) ns2.ids.net.id"
+  },
+  {
+    "timestamp": "2026-09-22T21:40:57.796Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "RECORD_ADDED",
+    "details": "Menambah record ids.net.id IN NS (TTL: 1800) ns1.ids.net.id"
+  },
+  {
+    "timestamp": "2026-09-22T21:37:37.312Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "RECORD_ADDED",
+    "details": "Menambah record ids.net.id IN NS (TTL: 1800) ns1.he.net"
+  },
+  {
+    "timestamp": "2026-09-22T21:37:17.063Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "RECORD_DELETED",
+    "details": "Menghapus record ids.net.id (NS)"
+  },
+  {
+    "timestamp": "2026-09-22T21:36:59.771Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "RECORD_ADDED",
+    "details": "Menambah record ids.net.id IN NS (TTL: 1800) ns1.he.net"
+  },
+  {
+    "timestamp": "2026-09-22T21:36:32.395Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "RECORD_ADDED",
+    "details": "Menambah record ids.net.id IN NS (TTL: 1800) ns1.he.net"
+  },
+  {
+    "timestamp": "2026-09-22T21:36:30.705Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "USER_LOGIN",
+    "details": "Berhasil login ke dashboard control center"
+  },
+  {
+    "timestamp": "2026-09-22T21:28:39.636Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "ZONE_CONFIG_UPDATED",
+    "details": "Mengubah pengaturan zone: domain=ids.net.id, primaryNS=ns1.ids.net.id"
+  },
+  {
+    "timestamp": "2026-09-22T21:26:13.951Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "USER_LOGIN",
+    "details": "Berhasil login ke dashboard control center"
+  },
+  {
+    "timestamp": "2026-09-22T21:25:49.380Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "USER_LOGIN",
+    "details": "Berhasil login ke dashboard control center"
+  },
+  {
+    "timestamp": "2026-09-22T21:25:39.330Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "USER_LOGIN",
+    "details": "Berhasil login ke dashboard control center"
+  },
+  {
+    "timestamp": "2026-09-22T21:09:15.547Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "RECORD_ADDED",
+    "details": "Menambah record billing IN A 10.90.12.123"
+  },
+  {
+    "timestamp": "2026-09-22T20:59:36.507Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "RECORD_ADDED",
+    "details": "Menambah record mail IN A 10.100.120.16"
+  },
+  {
+    "timestamp": "2026-09-22T20:50:49.180Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "USER_LOGIN",
+    "details": "Berhasil login ke dashboard control center"
+  },
+  {
+    "timestamp": "2026-09-22T20:50:43.672Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "USER_LOGOUT",
+    "details": "Logout dari sesi"
+  },
+  {
+    "timestamp": "2026-09-22T20:48:25.752Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "USER_LOGIN",
+    "details": "Berhasil login ke dashboard control center"
+  },
+  {
+    "timestamp": "2026-09-22T20:48:13.516Z",
+    "user": "auditor1",
+    "role": "viewer",
+    "action": "USER_LOGIN",
+    "details": "Berhasil login ke dashboard control center"
+  },
+  {
+    "timestamp": "2026-09-22T20:48:04.538Z",
+    "user": "operator1",
+    "role": "operator",
+    "action": "USER_LOGIN",
+    "details": "Berhasil login ke dashboard control center"
+  },
+  {
+    "timestamp": "2026-09-22T20:47:31.110Z",
+    "user": "system",
+    "role": "system",
+    "action": "SYSTEM_INITIALIZED",
+    "details": "Enterprise RBAC & Telemetry Engine active"
+  }
+]

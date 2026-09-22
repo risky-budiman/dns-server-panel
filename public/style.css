@@ -1,0 +1,442 @@
+:root {
+    --bg-main: #0b0f19;
+    --bg-sidebar: #0d1322;
+    --bg-card: #111827;
+    --bg-card-hover: #1f2937;
+    --border-color: #1f293d;
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --text-primary: #f9fafb;
+    --text-secondary: #9ca3af;
+    --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    line-height: 1.5;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Master Layout: Sidebar + Main Content */
+.app-layout {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 260px;
+    background-color: var(--bg-sidebar);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.sidebar-header {
+    padding: 24px 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.brand-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #f3f4f6;
+}
+
+.badge-isp {
+    background: #1e3a8a;
+    color: #93c5fd;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    margin-top: 6px;
+    display: inline-block;
+}
+
+.sidebar-menu {
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.nav-category {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 12px 12px 4px 12px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    transition: all 0.15s ease-in-out;
+}
+
+.sidebar-link:hover {
+    background-color: #1e293b;
+    color: var(--text-primary);
+}
+
+.sidebar-link.active {
+    background-color: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    border-left: 3px solid var(--primary);
+}
+
+.sidebar-footer {
+    padding: 16px;
+    border-top: 1px solid var(--border-color);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.user-profile-widget {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Main Content Area */
+.main-wrapper {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--bg-main);
+}
+
+.top-navbar {
+    height: 64px;
+    padding: 0 28px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(13, 19, 34, 0.6);
+    backdrop-filter: blur(8px);
+    flex-shrink: 0;
+}
+
+.content-body {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 28px;
+}
+
+/* Status Indicators */
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.dot-pulse {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: var(--success);
+    box-shadow: 0 0 10px var(--success);
+}
+.dot-pulse.degraded { background-color: var(--warning); box-shadow: 0 0 10px var(--warning); }
+.dot-pulse.offline { background-color: var(--danger); box-shadow: 0 0 10px var(--danger); }
+
+/* Node Metrics */
+.nodes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+}
+
+.card-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.card-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+
+.card-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: monospace;
+}
+
+.card-meta {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 6px;
+}
+
+.health-badge {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.health-badge.online {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.health-badge.offline {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--danger);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.role-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.role-badge.admin { background: #7f1d1d; color: #fca5a5; border: 1px solid #dc2626; }
+.role-badge.operator { background: #1e3a8a; color: #93c5fd; border: 1px solid #3b82f6; }
+.role-badge.viewer { background: #374151; color: #d1d5db; border: 1px solid #4b5563; }
+
+.meter-bar {
+    width: 100%;
+    height: 7px;
+    background: #1f2937;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+.meter-fill {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+/* Action Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s ease-in-out;
+}
+.btn-primary { background-color: var(--primary); color: white; }
+.btn-primary:hover { background-color: var(--primary-hover); }
+.btn-success { background-color: var(--success); color: white; }
+.btn-warning { background-color: #d97706; color: white; }
+.btn-warning:hover { background-color: #b45309; }
+.btn-danger { background-color: var(--danger); color: white; }
+.btn-secondary { background: #374151; color: white; }
+.btn-secondary:hover { background: #4b5563; }
+
+/* Table */
+.table-container {
+    overflow-x: auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.875rem;
+}
+
+th {
+    background-color: rgba(255, 255, 255, 0.02);
+    color: var(--text-secondary);
+    font-weight: 600;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+tr:hover { background-color: var(--bg-card-hover); }
+
+.type-badge {
+    padding: 3px 7px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.72rem;
+    font-family: monospace;
+    display: inline-block;
+    letter-spacing: 0.02em;
+}
+
+/* Color tags ala Hurricane Electric DNS */
+.type-badge.soa { background: #14532d; color: #86efac; border: 1px solid #16a34a; }
+.type-badge.ns { background: #064e3b; color: #6ee7b7; border: 1px solid #059669; }
+.type-badge.a { background: #1e293b; color: #f1f5f9; border: 1px solid #475569; }
+.type-badge.aaaa { background: #1e1b4b; color: #c7d2fe; border: 1px solid #4f46e5; }
+.type-badge.cname { background: #0c4a6e; color: #7dd3fc; border: 1px solid #0284c7; }
+.type-badge.mx { background: #4a044e; color: #f0abfc; border: 1px solid #a21caf; }
+.type-badge.txt { background: #022c22; color: #5eead4; border: 1px solid #0d9488; }
+.type-badge.other { background: #374151; color: #d1d5db; border: 1px solid #4b5563; }
+
+/* Hurricane Electric Table Row Styles */
+.he-dns-table tr.soa-row {
+    background-color: rgba(239, 68, 68, 0.04);
+}
+.he-dns-table tr.soa-row:hover {
+    background-color: rgba(239, 68, 68, 0.08);
+}
+
+.he-action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.05rem;
+    line-height: 1;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: transform 0.1s ease;
+}
+.he-action-btn:hover {
+    transform: scale(1.15);
+}
+.he-lock-icon {
+    font-size: 1.05rem;
+    opacity: 0.8;
+}
+
+/* Modals */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    backdrop-filter: blur(3px);
+}
+
+.modal-content {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    width: 100%;
+    max-width: 500px;
+    padding: 24px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+.form-group { margin-bottom: 16px; }
+label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 9px 12px;
+    background: #0f172a;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    outline: none;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--primary); }
+
+.log-terminal {
+    background: #030712;
+    border: 1px solid #1f2937;
+    border-radius: 6px;
+    padding: 16px;
+    font-family: monospace;
+    font-size: 0.85rem;
+    color: #10b981;
+    height: 250px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    margin-top: 16px;
+}
+
+/* Login View */
+#login-screen {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--bg-main);
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+}
+
+.login-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 420px;
+    padding: 32px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+}

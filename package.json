@@ -1,0 +1,25 @@
+{
+  "name": "dns-isp-orchestrator",
+  "version": "1.0.0",
+  "description": "Dual-Node ISP DNS Server, Automated RPZ Kominfo Sync, & Orchestrator Web Panel",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "sync-rpz": "node --max-old-space-size=512 src/rpz-worker.js"
+  },
+  "keywords": [
+    "dns",
+    "bind9",
+    "rpz",
+    "kominfo",
+    "trustpositif",
+    "isp",
+    "orchestrator"
+  ],
+  "author": "Network Operations Center",
+  "license": "ISC",
+  "dependencies": {
+    "ssh2": "^1.15.0"
+  }
+}

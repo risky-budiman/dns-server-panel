@@ -1,0 +1,11 @@
+{
+  "name": "dns-isp-orchestrator",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "ssh2": "^1.15.0"
+  }
+}

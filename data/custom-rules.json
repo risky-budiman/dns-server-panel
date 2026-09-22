@@ -1,0 +1,47 @@
+[
+  {
+    "id": "rule-1",
+    "domain": "doubleclick.net",
+    "type": "blacklist",
+    "category": "Advertising",
+    "hits": 1420,
+    "enabled": true,
+    "createdAt": "2026-09-20T10:00:00Z"
+  },
+  {
+    "id": "rule-2",
+    "domain": "google-analytics.com",
+    "type": "blacklist",
+    "category": "Tracking",
+    "hits": 3890,
+    "enabled": true,
+    "createdAt": "2026-09-20T10:05:00Z"
+  },
+  {
+    "id": "rule-3",
+    "domain": "ads.tiktok.com",
+    "type": "blacklist",
+    "category": "Advertising",
+    "hits": 890,
+    "enabled": true,
+    "createdAt": "2026-09-21T08:12:00Z"
+  },
+  {
+    "id": "rule-4",
+    "domain": "tracking-telemetry.microsoft.com",
+    "type": "blacklist",
+    "category": "Telemetry",
+    "hits": 612,
+    "enabled": true,
+    "createdAt": "2026-09-21T09:40:00Z"
+  },
+  {
+    "id": "rule-5",
+    "domain": "bankmandiri.co.id",
+    "type": "whitelist",
+    "category": "Finance",
+    "hits": 2450,
+    "enabled": true,
+    "createdAt": "2026-09-22T11:15:00Z"
+  }
+]

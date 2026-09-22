@@ -1,0 +1,114 @@
+{
+  "latest": {
+    "status": "SUCCESS",
+    "serial": 1790109778,
+    "recordsProcessed": 3,
+    "durationMs": 8,
+    "fileSizeBytes": 367,
+    "fileSizeFormatted": "0.00 MB",
+    "feedUrl": "https://trustpositif.kominfo.go.id/assets/db/domains.txt",
+    "timestamp": "2026-09-22T20:42:58.307Z"
+  },
+  "history": [
+    {
+      "status": "SUCCESS",
+      "serial": 1790109778,
+      "recordsProcessed": 3,
+      "durationMs": 8,
+      "fileSizeBytes": 367,
+      "fileSizeFormatted": "0.00 MB",
+      "feedUrl": "https://trustpositif.kominfo.go.id/assets/db/domains.txt",
+      "timestamp": "2026-09-22T20:42:58.307Z"
+    },
+    {
+      "status": "SUCCESS",
+      "serial": 1790109736,
+      "recordsProcessed": 3,
+      "durationMs": 7,
+      "fileSizeBytes": 367,
+      "fileSizeFormatted": "0.00 MB",
+      "feedUrl": "https://trustpositif.kominfo.go.id/assets/db/domains.txt",
+      "timestamp": "2026-09-22T20:42:16.125Z"
+    },
+    {
+      "status": "SUCCESS",
+      "serial": 1790109548,
+      "recordsProcessed": 3,
+      "durationMs": 7,
+      "fileSizeBytes": 367,
+      "fileSizeFormatted": "0.00 MB",
+      "feedUrl": "https://trustpositif.kominfo.go.id/assets/db/domains.txt",
+      "timestamp": "2026-09-22T20:39:08.517Z"
+    },
+    {
+      "status": "SUCCESS",
+      "serial": 1790109547,
+      "recordsProcessed": 3,
+      "durationMs": 8,
+      "fileSizeBytes": 367,
+      "fileSizeFormatted": "0.00 MB",
+      "feedUrl": "https://trustpositif.kominfo.go.id/assets/db/domains.txt",
+      "timestamp": "2026-09-22T20:39:07.770Z"
+    },
+    {
+      "status": "SUCCESS",
+      "serial": 1790109531,
+      "recordsProcessed": 3,
+      "durationMs": 8,
+      "fileSizeBytes": 367,
+      "fileSizeFormatted": "0.00 MB",
+      "feedUrl": "https://trustpositif.kominfo.go.id/assets/db/domains.txt",
+      "timestamp": "2026-09-22T20:38:51.617Z"
+    },
+    {
+      "status": "SUCCESS",
+      "serial": 1790109428,
+      "recordsProcessed": 3,
+      "durationMs": 5,
+      "fileSizeBytes": 367,
+      "fileSizeFormatted": "0.00 MB",
+      "feedUrl": "https://trustpositif.kominfo.go.id/assets/db/domains.txt",
+      "timestamp": "2026-09-22T20:37:08.432Z"
+    },
+    {
+      "status": "SUCCESS",
+      "serial": 1790109407,
+      "recordsProcessed": 3,
+      "durationMs": 8,
+      "fileSizeBytes": 367,
+      "fileSizeFormatted": "0.00 MB",
+      "feedUrl": "https://trustpositif.kominfo.go.id/assets/db/domains.txt",
+      "timestamp": "2026-09-22T20:36:47.925Z"
+    },
+    {
+      "status": "SUCCESS",
+      "serial": 1790109407,
+      "recordsProcessed": 3,
+      "durationMs": 6,
+      "fileSizeBytes": 367,
+      "fileSizeFormatted": "0.00 MB",
+      "feedUrl": "https://trustpositif.kominfo.go.id/assets/db/domains.txt",
+      "timestamp": "2026-09-22T20:36:47.347Z"
+    },
+    {
+      "status": "SUCCESS",
+      "serial": 1790109406,
+      "recordsProcessed": 3,
+      "durationMs": 6,
+      "fileSizeBytes": 367,
+      "fileSizeFormatted": "0.00 MB",
+      "feedUrl": "https://trustpositif.kominfo.go.id/assets/db/domains.txt",
+      "timestamp": "2026-09-22T20:36:46.429Z"
+    },
+    {
+      "status": "SUCCESS",
+      "serial": 1790109404,
+      "recordsProcessed": 3,
+      "durationMs": 12,
+      "fileSizeBytes": 367,
+      "fileSizeFormatted": "0.00 MB",
+      "feedUrl": "https://trustpositif.kominfo.go.id/assets/db/domains.txt",
+      "timestamp": "2026-09-22T20:36:44.745Z"
+    }
+  ]
+}

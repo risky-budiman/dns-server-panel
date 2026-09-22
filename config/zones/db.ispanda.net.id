@@ -1,0 +1,29 @@
+; ids.net.id Dumped Tue Sep 22 14:39:27 2026
+;
+ids.net.id.	172800	IN	SOA	ns1.he.net. hostmaster.he.net. (
+					2026061000	;serial
+					86400		;refresh
+					7200		;retry
+					3600000		;expire
+					172800	)	;minimum
+cpanel.ids.net.id.	14400	IN	A	203.175.8.49
+hostingermail-a._domainkey.ids.net.id.	300	IN	CNAME	hostingermail-a.dkim.mail.hostinger.com.
+hostingermail-b._domainkey.ids.net.id.	300	IN	CNAME	hostingermail-b.dkim.mail.hostinger.com.
+hostingermail-c._domainkey.ids.net.id.	300	IN	CNAME	hostingermail-c.dkim.mail.hostinger.com.
+hostingermail1._domainkey.ids.net.id.	3600	IN	TXT	( "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuGslHDVAjUaCc7Ta4vWMTOpzQla1umrAqnt/pAetUGUW64AaA17e2NEaPRwrfUnKqTWICA2jEJKPPKv+x8DAHA2MUUsM0oeD0VNZUhoUqvwGDJ7pMSvahe8RbV7v25vyPZjJYmHhWWJWVWbjgZUSHlFcAi64+yxfVQeBI1KKmfR07DKjGnVkItbsiqd9gk+iq"
+	eRLtU33d/yRq0BMh37Ri1dVU//EUewwRXtKW3cxq6hsFSJ2BZ93suGqgDypJtrha7NZTRK/crY59B2GiwCjqMg0YE02mLLu9KKsfQLoIS+IqnWoX7oQdINhFZ4kiHh8uTWNaHMcqI9mm4t4OtPGywIDAQAB )
+ids.net.id.	14400	IN	A	203.175.8.49
+ids.net.id.	14400	IN	MX	10 mx2.hostinger.com.
+ids.net.id.	14400	IN	MX	5 mx1.hostinger.com.
+ids.net.id.	1800	IN	NS	ns1.he.net.
+ids.net.id.	1800	IN	NS	ns1.rumahweb.com.
+ids.net.id.	1800	IN	NS	ns2.rumahweb.com.
+ids.net.id.	1800	IN	NS	ns3.rumahweb.net.
+ids.net.id.	1800	IN	NS	ns4.rumahweb.net.
+ids.net.id.	3600	IN	TXT	dc8821da36f95c796ba209f59d01093c
+ids.net.id.	1800	IN	TXT	google-site-verification=TCAiKNUtPxu2uV6bk4RMbvgGtFy7CB7R9JUUXQwLGpo
+ids.net.id.	3600	IN	TXT	"v=spf1 include:_spf.mail.hostinger.com ~all"
+my.ids.net.id.	300	IN	CNAME	886299d0-a720-46ff-a973-508a65024b9f.cfargotunnel.com.
+wa.ids.net.id.	300	IN	CNAME	886299d0-a720-46ff-a973-508a65024b9f.cfargotunnel.com.
+www.ids.net.id.	3600	IN	CNAME	ids.net.id.
+_dmarc.ids.net.id.	3600	IN	TXT	"v=DMARC1; p=none"

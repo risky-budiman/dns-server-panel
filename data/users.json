@@ -1,0 +1,26 @@
+[
+  {
+    "id": "usr_1",
+    "username": "admin",
+    "passwordHash": "d2ede483dddbd1d271e856288f967e533ded7a1dc8bda1ac5cb79b59cba320ac",
+    "role": "admin",
+    "fullName": "Super Administrator",
+    "createdAt": "2026-09-22T20:47:31.108Z"
+  },
+  {
+    "id": "usr_2",
+    "username": "operator1",
+    "passwordHash": "25f72d597ac8c3b719cff8e5eef20390de99007201e08bc6560a3d2d3d87b41d",
+    "role": "operator",
+    "fullName": "NOC Duty Engineer",
+    "createdAt": "2026-09-22T20:47:31.109Z"
+  },
+  {
+    "id": "usr_3",
+    "username": "auditor1",
+    "passwordHash": "4a6783ceea7ce5ec0ee847b6613c7168a2494d7fdc87de74be2f53d2c8da32c3",
+    "role": "viewer",
+    "fullName": "Security Auditor (Read-Only)",
+    "createdAt": "2026-09-22T20:47:31.109Z"
+  }
+]

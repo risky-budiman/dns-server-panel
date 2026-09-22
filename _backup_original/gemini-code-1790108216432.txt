@@ -1,0 +1,46 @@
+include "/etc/bind/tsig.key";
+
+server 103.100.50.2 {
+    keys { "transfer-key"; };
+};
+
+// VIEW INTERNAL: SLAVE RPZ
+view "internal-resolver" {
+    match-clients { "isp_clients"; };
+    recursion yes;
+    allow-recursion { "isp_clients"; };
+
+    forwarders {
+        1.1.1.1;
+        8.8.8.8;
+    };
+
+    response-policy {
+        zone "rpz.kominfo";
+    };
+
+    zone "rpz.kominfo" {
+        type secondary;
+        file "/var/lib/bind/kominfo.rpz";
+        primaries { 103.100.50.2; };
+    };
+
+    zone "ispanda.net.id" {
+        type secondary;
+        file "/var/lib/bind/db.ispanda.net.id";
+        primaries { 103.100.50.2; };
+    };
+};
+
+// VIEW EXTERNAL: SLAVE AUTH
+view "external-authoritative" {
+    match-clients { any; };
+    recursion no;
+    allow-query { any; };
+
+    zone "ispanda.net.id" {
+        type secondary;
+        file "/var/lib/bind/db.ispanda.net.id";
+        primaries { 103.100.50.2; };
+    };
+};

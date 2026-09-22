@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISP DNS Orchestrator Panel</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+    <!-- SCREEN 1: LOGIN (Ditampilkan jika belum autentikasi) -->
+    <div id="login-screen" style="display: none;">
+        <div class="login-box">
+            <div style="text-align: center; margin-bottom: 24px;">
+                <h2 style="font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+                    ⚡ ISP DNS Control Center
+                </h2>
+                <p style="color: var(--text-secondary); font-size: 0.85rem;">Dual-Node BIND9 & RPZ Orchestrator</p>
+            </div>
+            <div id="login-error"
+                style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #fca5a5; padding: 10px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 16px;">
+            </div>
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Username Operator</label>
+                    <input type="text" id="login-username" required placeholder="admin" autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" required placeholder="••••••••"
+                        autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn btn-primary"
+                    style="width: 100%; justify-content: center; padding: 10px; margin-top: 8px;">
+                    🔒 Masuk ke Control Panel
+                </button>
+            </form>
+            <div style="margin-top: 20px; text-align: center; color: var(--text-secondary); font-size: 0.75rem;">
+                Default Dev: <code>admin</code> / <code>ispadmin2026</code>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 2: MAIN DASHBOARD (SIDEBAR ADMIN LAYOUT) -->
+    <div class="app-layout" id="dashboard-screen" style="display: none;">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <div>
+                <div class="sidebar-header">
+                    <div class="brand-title">
+                        <span>⚡ DNS Panel</span>
+                    </div>
+                    <span class="badge-isp">Dual-Node BIND9</span>
+                </div>
+
+                <nav class="sidebar-menu">
+                    <div class="nav-category">DNS Management</div>
+                    <button class="sidebar-link active" id="tab-btn-records" onclick="switchTab('records', this)">
+                        <span>🌐</span> Authoritative Records
+                    </button>
+                    <button class="sidebar-link" id="tab-btn-zone" onclick="switchTab('zone', this)">
+                        <span>⚙️</span> Domain & Zone Settings
+                    </button>
+                    <button class="sidebar-link" id="tab-btn-blocking" onclick="switchTab('blocking', this)">
+                        <span>🛡️</span> Custom Blocking
+                    </button>
+                    <button class="sidebar-link" id="tab-btn-rpz" onclick="switchTab('rpz', this)">
+                        <span>📡</span> RPZ Kominfo Sync
+                    </button>
+
+                    <div class="nav-category">Monitoring & Infra</div>
+                    <button class="sidebar-link" id="tab-btn-metrics" onclick="switchTab('metrics', this)">
+                        <span>📊</span> System Telemetry & QPS
+                    </button>
+                    <button class="sidebar-link" id="tab-btn-provision" onclick="switchTab('provision', this)">
+                        <span>🚀</span> Secure Provisioning
+                    </button>
+
+                    <div class="nav-category">Security & Access</div>
+                    <button class="sidebar-link" id="tab-btn-users" onclick="switchTab('users', this)">
+                        <span>👥</span> User Management (RBAC)
+                    </button>
+                    <button class="sidebar-link" id="tab-btn-audit" onclick="switchTab('audit', this)">
+                        <span>📝</span> Audit Trail Logs
+                    </button>
+                </nav>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-profile-widget">
+                    <div id="user-badge"
+                        style="font-size: 0.8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">User:
+                        Admin</div>
+                    <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;"
+                        onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Right Main Content Area -->
+        <main class="main-wrapper">
+            <header class="top-navbar">
+                <div class="status-indicator">
+                    <div class="dot-pulse" id="global-dot"></div>
+                    <span id="global-status-text">Memeriksa Kesehatan Node...</span>
+                </div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary); font-family: monospace;">
+                    Zone: <strong style="color: #60a5fa;" id="top-domain-badge">ispanda.net.id</strong>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <!-- Live Health & Node Metrics Grid -->
+                <div class="nodes-grid">
+                    <div class="card">
+                        <div class="card-header-flex">
+                            <span class="card-title">Primary Node (NS1)</span>
+                            <span class="health-badge online" id="p-badge">ONLINE</span>
+                        </div>
+                        <div class="card-value" id="primary-ip">103.100.50.2</div>
+                        <div class="card-meta" id="p-meta">Port 53: LISTENING | DNS Query: OK</div>
+                        <div class="card-meta" style="color: #94a3b8; font-size: 0.75rem;">* ICMP Ping diblokir Firewall
+                            ISP (Standar Proteksi)</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header-flex">
+                            <span class="card-title">Secondary Node (NS2)</span>
+                            <span class="health-badge online" id="s-badge">ONLINE</span>
+                        </div>
+                        <div class="card-value" id="secondary-ip">103.100.50.3</div>
+                        <div class="card-meta" id="s-meta">Port 53: LISTENING | DNS Query: OK</div>
+                        <div class="card-meta" style="color: #94a3b8; font-size: 0.75rem;">* ICMP Ping diblokir Firewall
+                            ISP (Standar Proteksi)</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header-flex">
+                            <span class="card-title">Authoritative Zone</span>
+                            <span class="health-badge online" id="zone-badge">ACTIVE</span>
+                        </div>
+                        <div class="card-value" id="active-domain">ispanda.net.id</div>
+                        <div class="card-meta" id="records-count">Total Records: -</div>
+                        <div class="card-meta" style="color: #34d399;">SOA Auto-increment active</div>
+                    </div>
+                </div>
+
+                <!-- TAB 1: DNS Records Table (Hurricane Electric / cPanel Style) -->
+                <div id="tab-records">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <h2 style="font-size: 1.15rem; font-weight: 700;">Zone DNS Records</h2>
+                            <p style="color: var(--text-secondary); font-size: 0.8rem;">Kelola master authoritative
+                                zone, parameter SOA, dan record DNS (BIND9 AXFR/IXFR Hot Reload).</p>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-secondary" onclick="openZoneSettingsModal()">⚙️ Pengaturan Zone &
+                                SOA</button>
+                            <button class="btn btn-primary" onclick="openAddModal()">+ Tambah DNS Record</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="he-dns-table">
+                            <thead>
+                                <tr>
+                                    <th style="min-width: 180px;">Name (FQDN)</th>
+                                    <th style="width: 70px; text-align: center;">Type</th>
+                                    <th style="width: 90px;">TTL</th>
+                                    <th style="width: 70px; text-align: center;">Priority</th>
+                                    <th>Data / Target Pointing</th>
+                                    <th style="width: 60px; text-align: center;">DDNS</th>
+                                    <th style="width: 80px; text-align: center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="records-table-body">
+                                <tr>
+                                    <td colspan="7" style="text-align: center; color: var(--text-secondary);">Memuat
+                                        data records...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 1B: Domain & Zone Settings (Pengaturan Domain & SOA) -->
+                <div id="tab-zone" style="display: none;">
+                    <div class="card" style="max-width: 800px; margin-bottom: 24px;">
+                        <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 14px; margin-bottom: 20px;">
+                            <h2 style="font-size: 1.2rem; font-weight: 700; color: #60a5fa; display: flex; align-items: center; gap: 8px;">
+                                <span>⚙️</span> Pengaturan Domain & Authoritative Zone
+                            </h2>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px;">
+                                Kelola nama domain master, nameserver primary/secondary, kontak hostmaster, dan parameter SOA BIND9. Perubahan akan otomatis meng-update file zone master dan me-reload daemon BIND9.
+                            </p>
+                        </div>
+
+                        <form id="zone-domain-form" onsubmit="handleSaveZoneTab(event)">
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="font-weight: 700; font-size: 0.9rem; color: #f1f5f9;">Nama Domain Utama (Zone Domain)</label>
+                                <input type="text" id="tab-zs-domain" required placeholder="misal: sahabatit.my.id atau ispanda.net.id" style="font-size: 1rem; padding: 10px 14px; font-weight: 600; color: #38bdf8;">
+                                <span style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px; display: block;">
+                                    * Ini adalah apex domain yang dilayani secara authoritatif oleh cluster DNS BIND9 Anda.
+                                </span>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                                <div class="form-group">
+                                    <label>Primary Master Nameserver (MNAME)</label>
+                                    <input type="text" id="tab-zs-primary-ns" required placeholder="ns1.domain.com">
+                                </div>
+                                <div class="form-group">
+                                    <label>Secondary Slave Nameserver</label>
+                                    <input type="text" id="tab-zs-secondary-ns" required placeholder="ns2.domain.com">
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label>Hostmaster / Contact Email (RNAME)</label>
+                                <input type="text" id="tab-zs-hostmaster" required placeholder="hostmaster.domain.com">
+                                <span style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px; display: block;">
+                                    * Format DNS: tanda @ diganti dengan titik (contoh: hostmaster.domain.com untuk hostmaster@domain.com).
+                                </span>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 24px;">
+                                <div class="form-group">
+                                    <label>Default TTL (Detik)</label>
+                                    <input type="number" id="tab-zs-ttl" value="86400" placeholder="86400">
+                                </div>
+                                <div class="form-group">
+                                    <label>Refresh Interval (Detik)</label>
+                                    <input type="number" id="tab-zs-refresh" value="3600" placeholder="3600">
+                                </div>
+                                <div class="form-group">
+                                    <label>Retry Interval (Detik)</label>
+                                    <input type="number" id="tab-zs-retry" value="1800" placeholder="1800">
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 12px; align-items: center;">
+                                <button type="submit" class="btn btn-primary" style="padding: 10px 24px; font-size: 0.9rem;">
+                                    💾 Simpan Perubahan Domain & Reload BIND9
+                                </button>
+                                <span id="zone-save-status" style="font-size: 0.85rem; color: #34d399; font-weight: 600; display: none;">
+                                    ✓ Konfigurasi tersimpan dan aktif!
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- TAB 2: RPZ Kominfo (Comprehensive Monitor) -->
+                <div id="tab-rpz" style="display: none;">
+                    <!-- Header Action Card -->
+                    <div class="card" style="margin-bottom: 20px;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                            <div>
+                                <h3 style="font-size: 1.1rem; font-weight: 600;">Sinkronisasi Trustpositif Kominfo (RPZ
+                                    RFC 6672)</h3>
+                                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px;">
+                                    Pipeline stream download, normalisasi domain, atomic temporary swap, dan
+                                    zero-downtime hot reload BIND9.
+                                </p>
+                            </div>
+                            <button class="btn btn-success" id="btn-sync-rpz" onclick="triggerRPZSync()"
+                                style="padding: 10px 18px;">
+                                🔄 Sync Kominfo Now
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- RPZ Parameter Cards Grid -->
+                    <div class="nodes-grid" style="margin-bottom: 20px;">
+                        <div class="card">
+                            <div class="card-header-flex">
+                                <span class="card-title">Total Domain Terblokir</span>
+                                <span class="health-badge online" id="rpz-status-badge">ACTIVE</span>
+                            </div>
+                            <div class="card-value" style="color: #f87171;" id="rpz-total-domains">--</div>
+                            <div class="card-meta">Format: CNAME . (NXDOMAIN Policy)</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header-flex">
+                                <span class="card-title">Serial Zone RPZ (SOA)</span>
+                                <span class="health-badge online">BIND9</span>
+                            </div>
+                            <div class="card-value" style="color: #60a5fa;" id="rpz-serial">--</div>
+                            <div class="card-meta" id="rpz-file-size">Zone File: -- MB</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header-flex">
+                                <span class="card-title">Waktu Terakhir Sinkronisasi</span>
+                                <span class="health-badge online" id="rpz-sync-badge">FRESH</span>
+                            </div>
+                            <div class="card-value" style="font-size: 1rem; color: #34d399;" id="rpz-last-sync">--</div>
+                            <div class="card-meta" id="rpz-duration">Durasi Pipeline: -- ms</div>
+                        </div>
+                    </div>
+
+                    <!-- Riwayat Sinkronisasi Table -->
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 10px;">📋 Riwayat Sinkronisasi
+                            Terakhir (Sync History)</h4>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Waktu Eksekusi</th>
+                                        <th>Status</th>
+                                        <th>Domain Diproses</th>
+                                        <th>Serial Baru</th>
+                                        <th>Ukuran Zone</th>
+                                        <th>Durasi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rpz-history-table">
+                                    <tr>
+                                        <td colspan="6" style="text-align: center; color: var(--text-secondary);">Memuat
+                                            riwayat sinkronisasi...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <h4 style="font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">Execution Logs (Live Output)
+                    </h4>
+                    <div class="log-terminal" id="rpz-log">System idle. Tekan tombol "Sync Kominfo Now" untuk memicu
+                        pipeline sinkronisasi.</div>
+                </div>
+
+                <!-- TAB 2B: Custom Blocking & Whitelisting (AdGuard / Pi-hole Style) -->
+                <div id="tab-blocking" style="display: none;">
+                    <!-- Metrics Banner Grid -->
+                    <div class="nodes-grid" style="margin-bottom: 20px;">
+                        <div class="card">
+                            <div class="card-header-flex">
+                                <span class="card-title">Total DNS Queries</span>
+                                <span class="health-badge online">REALTIME</span>
+                            </div>
+                            <div class="card-value" style="color: #60a5fa;" id="blk-total-queries">--</div>
+                            <div class="card-meta">Aktivitas query klien ISP</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header-flex">
+                                <span class="card-title">Queries Blocked</span>
+                                <span class="health-badge offline">PROTECTED</span>
+                            </div>
+                            <div class="card-value" style="color: #f87171;" id="blk-total-blocked">--</div>
+                            <div class="card-meta" id="blk-rules-active">Rules Aktif: --</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header-flex">
+                                <span class="card-title">Block Ratio (%)</span>
+                                <span class="health-badge online" id="blk-ratio-badge">ACTIVE</span>
+                            </div>
+                            <div class="card-value" style="color: #34d399;" id="blk-ratio">--%</div>
+                            <div class="card-meta">Persentase trafik ancaman/iklan dicegah</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header-flex">
+                                <span class="card-title">Custom Whitelist</span>
+                                <span class="health-badge online">BYPASS</span>
+                            </div>
+                            <div class="card-value" style="color: #fbbf24;" id="blk-whitelist-count">--</div>
+                            <div class="card-meta">Domain diproteksi dari false-positive</div>
+                        </div>
+                    </div>
+
+                    <!-- Form Tambah Domain Pemblokiran Cepat -->
+                    <div class="card" style="margin-bottom: 20px;">
+                        <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 12px;">🛡️ Tambah Aturan
+                            Pemblokiran / Whitelist (AdGuard/Pi-hole Engine)</h3>
+                        <form id="add-block-form" onsubmit="handleCreateBlockRule(event)"
+                            style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
+                            <div style="flex: 2; min-width: 200px;">
+                                <label
+                                    style="font-size: 0.8rem; color: var(--text-secondary); display: block; margin-bottom: 4px;">Nama
+                                    Domain (Mendukung Wildcard Subdomain)</label>
+                                <input type="text" id="blk-domain" required
+                                    placeholder="misal: doubleclick.net, ads.tiktok.com, *.tracker.io"
+                                    style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #0f172a; border: 1px solid var(--border-color); color: white;">
+                            </div>
+                            <div style="flex: 1; min-width: 140px;">
+                                <label
+                                    style="font-size: 0.8rem; color: var(--text-secondary); display: block; margin-bottom: 4px;">Tipe
+                                    Aturan</label>
+                                <select id="blk-type"
+                                    style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #0f172a; border: 1px solid var(--border-color); color: white;">
+                                    <option value="blacklist">⛔ Blacklist (Blokir)</option>
+                                    <option value="whitelist">✅ Whitelist (Izinkan)</option>
+                                </select>
+                            </div>
+                            <div style="flex: 1; min-width: 140px;">
+                                <label
+                                    style="font-size: 0.8rem; color: var(--text-secondary); display: block; margin-bottom: 4px;">Kategori</label>
+                                <select id="blk-category"
+                                    style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #0f172a; border: 1px solid var(--border-color); color: white;">
+                                    <option value="Advertising">Advertising / Iklan</option>
+                                    <option value="Tracking">Tracking & Telemetry</option>
+                                    <option value="Malware">Malware / Phishing</option>
+                                    <option value="Social Media">Social Media</option>
+                                    <option value="Finance">Finance / Banking</option>
+                                    <option value="Custom">Custom ISP Rule</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-danger" style="padding: 9px 18px;">
+                                + Tambah Rule
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Grid: Daftar Aturan & Top Blocked Hits -->
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 24px;">
+                        <div>
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <h4 style="font-size: 0.95rem; font-weight: 700;">📋 Daftar Aturan Filter Manual</h4>
+                                <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;"
+                                    onclick="fetchBlockingData()">🔄 Refresh</button>
+                            </div>
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Domain Pattern</th>
+                                            <th>Tipe</th>
+                                            <th>Kategori</th>
+                                            <th style="text-align: center;">Hits Terblokir</th>
+                                            <th style="text-align: center;">Status</th>
+                                            <th style="text-align: right;">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="blocking-rules-table-body">
+                                        <tr>
+                                            <td colspan="6" style="text-align: center; color: var(--text-secondary);">
+                                                Memuat aturan filter...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 10px;">🔥 Top Blocked
+                                Domains (Hit Counts)</h4>
+                            <div class="card" style="padding: 14px;">
+                                <div id="top-blocked-list" style="display: flex; flex-direction: column; gap: 10px;">
+                                    <div style="color: var(--text-secondary); font-size: 0.8rem; text-align: center;">
+                                        Memuat top hits...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Query Log Feed (Mirip Pi-hole Query Log) -->
+                    <div>
+                        <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 10px;">⚡ Live DNS Query Log &
+                            Block Action Stream</h4>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Waktu</th>
+                                        <th>Client IP</th>
+                                        <th>Domain Query</th>
+                                        <th>Tipe</th>
+                                        <th>Status Resolusi</th>
+                                        <th>Filter Reason</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="live-query-log-body">
+                                    <tr>
+                                        <td colspan="6" style="text-align: center; color: var(--text-secondary);">Memuat
+                                            query stream...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: Provisioning Dual Node Aman -->
+                <div id="tab-provision" style="display: none;">
+                    <div class="card">
+                        <div style="margin-bottom: 16px;">
+                            <h3 style="font-size: 1.1rem; font-weight: 600;">Deploy Dual-Node DNS Server (Hardened)</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px;">
+                                Mendukung akun Non-Root dengan sudo privilege untuk menghindari risiko keamanan login
+                                langsung sebagai root publik.
+                            </p>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div>
+                                <h4 style="font-size: 0.85rem; color: var(--primary); margin-bottom: 12px;">PRIMARY
+                                    SERVER (NS1)</h4>
+                                <div class="form-group">
+                                    <label>IP Host</label>
+                                    <input type="text" id="prov-p-ip" value="103.100.50.2">
+                                </div>
+                                <div class="form-group">
+                                    <label>SSH Port</label>
+                                    <input type="number" id="prov-p-port" value="22">
+                                </div>
+                                <div class="form-group">
+                                    <label>SSH Username (Bisa user biasa / Sudoer)</label>
+                                    <input type="text" id="prov-p-user" value="sysadmin">
+                                </div>
+                                <div class="form-group">
+                                    <label>SSH Password / Sudo Password</label>
+                                    <input type="password" id="prov-p-pass" placeholder="••••••••">
+                                </div>
+                            </div>
+                            <div>
+                                <h4 style="font-size: 0.85rem; color: var(--primary); margin-bottom: 12px;">SECONDARY
+                                    SERVER (NS2)</h4>
+                                <div class="form-group">
+                                    <label>IP Host</label>
+                                    <input type="text" id="prov-s-ip" value="103.100.50.3">
+                                </div>
+                                <div class="form-group">
+                                    <label>SSH Port</label>
+                                    <input type="number" id="prov-s-port" value="22">
+                                </div>
+                                <div class="form-group">
+                                    <label>SSH Username (Bisa user biasa / Sudoer)</label>
+                                    <input type="text" id="prov-s-user" value="sysadmin">
+                                </div>
+                                <div class="form-group">
+                                    <label>SSH Password / Sudo Password</label>
+                                    <input type="password" id="prov-s-pass" placeholder="••••••••">
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 12px; display: flex; gap: 12px; align-items: center;">
+                            <button class="btn btn-primary" onclick="startProvisioning()">
+                                🚀 Mulai Hardened Provisioning
+                            </button>
+                            <span style="font-size: 0.8rem; color: var(--text-secondary);">
+                                * Otomatis meng-generate kunci TSIG baru dan mengunci hak akses file ke 640 root:bind.
+                            </span>
+                        </div>
+                        <div class="log-terminal" id="prov-log" style="display: none; margin-top: 16px;"></div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: Enterprise System Telemetry & DNS QPS -->
+                <div id="tab-metrics" style="display: none;">
+                    <div class="nodes-grid" style="margin-bottom: 20px;">
+                        <div class="card">
+                            <div class="card-header-flex">
+                                <span class="card-title">CPU Utilization</span>
+                                <span class="health-badge online" id="metric-cpu-badge">NORMAL</span>
+                            </div>
+                            <div class="card-value" id="metric-cpu-val">Load: --</div>
+                            <div class="meter-bar">
+                                <div class="meter-fill" id="meter-cpu" style="width: 15%;"></div>
+                            </div>
+                            <div class="card-meta" id="metric-cpu-cores">Cores: -- | Host: --</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header-flex">
+                                <span class="card-title">Memory (RAM) Usage</span>
+                                <span class="health-badge online" id="metric-ram-badge">HEALTHY</span>
+                            </div>
+                            <div class="card-value" id="metric-ram-val">-- / -- GB</div>
+                            <div class="meter-bar">
+                                <div class="meter-fill" id="meter-ram" style="width: 40%;"></div>
+                            </div>
+                            <div class="card-meta" id="metric-ram-percent">Used: --% | Free: -- GB</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header-flex">
+                                <span class="card-title">Disk Storage (/var/lib/bind)</span>
+                                <span class="health-badge online">SAFE</span>
+                            </div>
+                            <div class="card-value" id="metric-disk-val">-- / --</div>
+                            <div class="meter-bar">
+                                <div class="meter-fill" id="meter-disk" style="width: 35%;"></div>
+                            </div>
+                            <div class="card-meta" id="metric-disk-percent">Capacity: --% Used</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header-flex">
+                                <span class="card-title">DNS Traffic (QPS)</span>
+                                <span class="health-badge online">ACTIVE</span>
+                            </div>
+                            <div class="card-value" style="color: #38bdf8;" id="metric-qps-val">-- QPS</div>
+                            <div class="card-meta">24h Peak: ~3,850 QPS | Cache Hit: 92.4%</div>
+                            <div class="card-meta" style="color: #34d399;" id="metric-rrl-mitigated">DDoS RRL Mitigated:
+                                -- drops</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 8px;">Uptime & Query Types
+                            Breakdown</h4>
+                        <div
+                            style="display: flex; gap: 24px; flex-wrap: wrap; color: var(--text-secondary); font-size: 0.85rem;">
+                            <div>Uptime Server: <strong style="color: var(--text-primary);"
+                                    id="metric-uptime">--</strong></div>
+                            <div>Query A (IPv4): <strong style="color: #38bdf8;">72%</strong></div>
+                            <div>Query AAAA (IPv6): <strong style="color: #818cf8;">21%</strong></div>
+                            <div>Query PTR: <strong style="color: #fbbf24;">4%</strong></div>
+                            <div>Other: <strong style="color: #9ca3af;">3%</strong></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 5: User Management (RBAC) -->
+                <div id="tab-users" style="display: none;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <div>
+                            <h2 style="font-size: 1.1rem; font-weight: 600;">Kelola Pengguna & Privilege (RBAC)</h2>
+                            <p style="color: var(--text-secondary); font-size: 0.8rem;">Atur hak akses berjenjang: Super
+                                Admin, NOC Operator, dan Auditor.</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="openAddUserModal()">+ Tambah User Baru</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Nama Lengkap</th>
+                                    <th>Role / Privilege</th>
+                                    <th>Tanggal Dibuat</th>
+                                    <th style="text-align: right;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; color: var(--text-secondary);">Memuat
+                                        data pengguna...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 6: Audit Logs -->
+                <div id="tab-audit" style="display: none;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <div>
+                            <h2 style="font-size: 1.1rem; font-weight: 600;">Sistem Audit Trail Logs</h2>
+                            <p style="color: var(--text-secondary); font-size: 0.8rem;">Catatan jejak aktivitas login,
+                                perubahan record DNS, dan trigger sync Kominfo.</p>
+                        </div>
+                        <button class="btn btn-secondary" onclick="fetchAuditLogs()">🔄 Refresh Logs</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Waktu</th>
+                                    <th>User</th>
+                                    <th>Role</th>
+                                    <th>Aktivitas (Action)</th>
+                                    <th>Detail Perubahan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="audit-table-body">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; color: var(--text-secondary);">Memuat
+                                        audit log...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> <!-- End of content-body -->
+        </main> <!-- End of main-wrapper -->
+    </div> <!-- End of app-layout -->
+
+    <!-- Modal Tambah User Baru -->
+    <div class="modal-overlay" id="add-user-modal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 16px; font-size: 1.1rem; font-weight: 700;">Tambah User Panel Baru</h3>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="usr-username" placeholder="misal: noc_andi">
+            </div>
+            <div class="form-group">
+                <label>Nama Lengkap</label>
+                <input type="text" id="usr-fullname" placeholder="misal: Andi Pratama (NOC)">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="usr-password" placeholder="••••••••">
+            </div>
+            <div class="form-group">
+                <label>Role / Privilege</label>
+                <select id="usr-role">
+                    <option value="operator">NOC Operator (Kelola Record & RPZ Sync)</option>
+                    <option value="viewer">Auditor / Viewer (Read-Only Tanpa Aksi)</option>
+                    <option value="admin">Super Administrator (Akses Penuh)</option>
+                </select>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-secondary" onclick="closeModal('add-user-modal')">Batal</button>
+                <button class="btn btn-primary" onclick="submitCreateUser()">Buat User</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Pengaturan Zone Authoritative & Parameter SOA -->
+    <div class="modal-overlay" id="zone-settings-modal">
+        <div class="modal-content" style="max-width: 520px;">
+            <h3 style="margin-bottom: 14px; font-size: 1.15rem; font-weight: 700; color: #60a5fa;">⚙️ Pengaturan Authoritative Zone & SOA</h3>
+            <p style="color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 16px;">
+                Ubah nama domain induk dan parameter SOA BIND9. Perubahan akan menaikkan serial zone secara otomatis.
+            </p>
+            <div class="form-group">
+                <label>Nama Domain Zone Induk</label>
+                <input type="text" id="zs-domain" placeholder="misal: sahabatit.my.id atau ispanda.net.id">
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="form-group">
+                    <label>Primary Master NS (MNAME)</label>
+                    <input type="text" id="zs-primary-ns" placeholder="ns1.domain.com">
+                </div>
+                <div class="form-group">
+                    <label>Secondary NS</label>
+                    <input type="text" id="zs-secondary-ns" placeholder="ns2.domain.com">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Contact / Hostmaster Email (RNAME)</label>
+                <input type="text" id="zs-hostmaster" placeholder="hostmaster.domain.com">
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                <div class="form-group">
+                    <label>Default TTL (s)</label>
+                    <input type="number" id="zs-ttl" value="86400">
+                </div>
+                <div class="form-group">
+                    <label>Refresh (s)</label>
+                    <input type="number" id="zs-refresh" value="3600">
+                </div>
+                <div class="form-group">
+                    <label>Retry (s)</label>
+                    <input type="number" id="zs-retry" value="1800">
+                </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-secondary" onclick="closeModal('zone-settings-modal')">Batal</button>
+                <button class="btn btn-primary" onclick="submitZoneSettings()">Simpan & Reload BIND9</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah DNS Record -->
+    <div class="modal-overlay" id="add-modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <h3 style="margin-bottom: 16px; font-size: 1.1rem; font-weight: 700;">Tambah DNS Record Baru</h3>
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px;">
+                <div class="form-group">
+                    <label>Nama Subdomain (@ untuk root)</label>
+                    <input type="text" id="rec-name" placeholder="misal: portal, api, mail">
+                </div>
+                <div class="form-group">
+                    <label>Tipe Record</label>
+                    <select id="rec-type" onchange="togglePriorityField('rec-type', 'rec-priority-group')">
+                        <option value="A">A (IPv4 Address)</option>
+                        <option value="AAAA">AAAA (IPv6 Address)</option>
+                        <option value="CNAME">CNAME (Alias)</option>
+                        <option value="TXT">TXT (Text Record)</option>
+                        <option value="MX">MX (Mail Exchange)</option>
+                        <option value="NS">NS (Nameserver)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="form-group">
+                    <label>TTL (Time to Live - Detik)</label>
+                    <input type="number" id="rec-ttl" value="1800">
+                </div>
+                <div class="form-group" id="rec-priority-group" style="display: none;">
+                    <label>Priority (Khusus MX)</label>
+                    <input type="number" id="rec-priority" value="10">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Target / Nilai Pointing</label>
+                <input type="text" id="rec-target" placeholder="misal: 103.100.50.10 atau domain.com.">
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-secondary" onclick="closeModal('add-modal')">Batal</button>
+                <button class="btn btn-primary" onclick="submitAddRecord()">Simpan Record</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit DNS Record -->
+    <div class="modal-overlay" id="edit-modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <h3 style="margin-bottom: 16px; font-size: 1.1rem; font-weight: 700; color: #fbbf24;">Edit DNS Record</h3>
+            <input type="hidden" id="edit-old-name">
+            <input type="hidden" id="edit-old-type">
+            <input type="hidden" id="edit-old-target">
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px;">
+                <div class="form-group">
+                    <label>Nama Subdomain</label>
+                    <input type="text" id="edit-name">
+                </div>
+                <div class="form-group">
+                    <label>Tipe Record</label>
+                    <select id="edit-type" onchange="togglePriorityField('edit-type', 'edit-priority-group')">
+                        <option value="A">A (IPv4 Address)</option>
+                        <option value="AAAA">AAAA (IPv6 Address)</option>
+                        <option value="CNAME">CNAME (Alias)</option>
+                        <option value="TXT">TXT (Text Record)</option>
+                        <option value="MX">MX (Mail Exchange)</option>
+                        <option value="NS">NS (Nameserver)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="form-group">
+                    <label>TTL (Detik)</label>
+                    <input type="number" id="edit-ttl" value="1800">
+                </div>
+                <div class="form-group" id="edit-priority-group" style="display: none;">
+                    <label>Priority (Khusus MX)</label>
+                    <input type="number" id="edit-priority" value="10">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Target / Nilai Pointing</label>
+                <input type="text" id="edit-target">
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-secondary" onclick="closeModal('edit-modal')">Batal</button>
+                <button class="btn btn-warning" onclick="submitEditRecord()">Update Record</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/app.js"></script>
+</body>
+
+</html>

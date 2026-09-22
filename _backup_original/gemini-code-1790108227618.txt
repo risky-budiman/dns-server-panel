@@ -1,0 +1,15 @@
+$TTL 86400
+@   IN  SOA ns1.ispanda.net.id. hostmaster.ispanda.net.id. (
+            2026092301 ; Serial YYYYMMDDNN
+            3600       ; Refresh
+            1800       ; Retry
+            1209600    ; Expire
+            86400 )    ; Minimum TTL
+
+@       IN  NS      ns1.ispanda.net.id.
+@       IN  NS      ns2.ispanda.net.id.
+
+ns1     IN  A       103.100.50.2
+ns2     IN  A       103.100.50.3
+@       IN  A       103.100.50.10
+panel   IN  A       103.100.50.2

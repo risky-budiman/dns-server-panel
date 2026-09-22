@@ -1,0 +1,22 @@
+acl "isp_clients" {
+    127.0.0.1;
+    ::1;
+    103.100.50.0/24;
+    10.0.0.0/8;
+};
+
+options {
+    directory "/var/cache/bind";
+
+    listen-on port 53 { any; };
+    listen-on-v6 port 53 { any; };
+
+    version "none";
+    dnssec-validation auto;
+
+    // Mitigasi DNS Amplification Attack
+    rate-limit {
+        responses-per-second 25;
+        window 5;
+    };
+};

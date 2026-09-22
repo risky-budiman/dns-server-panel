@@ -1,0 +1,1 @@
+tsig-keygen -a hmac-sha256 transfer-key
