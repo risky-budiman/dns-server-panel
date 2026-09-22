@@ -110,10 +110,29 @@ function authHeaders() {
 }
 
 // UI Tabs / Sidebar Navigation
+function toggleMobileSidebar(show) {
+    const sidebar = document.getElementById('app-sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    if (!sidebar) return;
+
+    if (show) {
+        sidebar.classList.add('open');
+        if (backdrop) backdrop.classList.add('active');
+    } else {
+        sidebar.classList.remove('open');
+        if (backdrop) backdrop.classList.remove('active');
+    }
+}
+
 function switchTab(tabName, el) {
     document.querySelectorAll('.sidebar-link').forEach(btn => btn.classList.remove('active'));
     if (el) {
         el.classList.add('active');
+    }
+
+    // Auto-close drawer on mobile after clicking
+    if (window.innerWidth <= 768) {
+        toggleMobileSidebar(false);
     }
 
     const tabRecords = document.getElementById('tab-records');

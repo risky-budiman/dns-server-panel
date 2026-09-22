@@ -447,3 +447,216 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); }
     padding: 32px;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
 }
+
+/* Mobile Toggle and Close Buttons (Hidden on Desktop) */
+.mobile-toggle-btn {
+    display: none;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+}
+.mobile-toggle-btn:hover {
+    background-color: var(--bg-card-hover);
+}
+
+.mobile-close-btn {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    line-height: 1;
+}
+.mobile-close-btn:hover {
+    color: var(--text-primary);
+}
+
+/* Sidebar Backdrop on Mobile */
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 140;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+}
+.sidebar-backdrop.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ==========================================================================
+   RESPONSIVE MEDIA QUERIES (Mobile, Tablet, Small Desktop)
+   ========================================================================== */
+
+/* Tablets & Small Laptops (max-width: 1024px) */
+@media (max-width: 1024px) {
+    .nodes-grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 12px;
+    }
+
+    .top-navbar {
+        padding: 0 16px;
+    }
+
+    .content-body {
+        padding: 20px 16px;
+    }
+}
+
+/* Mobile Devices & Small Tablets (max-width: 768px) */
+@media (max-width: 768px) {
+    .app-layout {
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Transform Sidebar into an Off-canvas Drawer */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 150;
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.6);
+        width: 280px;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .mobile-toggle-btn {
+        display: inline-flex;
+    }
+
+    .mobile-close-btn {
+        display: block;
+    }
+
+    .sidebar-backdrop {
+        display: block;
+    }
+
+    .top-navbar {
+        height: 56px;
+        padding: 0 14px;
+    }
+
+    .content-body {
+        padding: 16px 12px;
+    }
+
+    /* Grid layout stacked vertically */
+    .nodes-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    .card-value {
+        font-size: 1.1rem;
+    }
+
+    /* Responsive Headers and Flex Wrappers */
+    .section-header-flex {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 12px !important;
+    }
+
+    /* Stack multi-column form grids on mobile */
+    div[style*="grid-template-columns: 1fr 1fr"],
+    div[style*="grid-template-columns: 2fr 1fr"],
+    div[style*="grid-template-columns: 1fr 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+
+    /* Stack flex headers that wrap */
+    div[style*="justify-content: space-between"] {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 10px;
+    }
+
+    /* Full width buttons on small screens */
+    .btn-group-mobile {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    /* Responsive Tables with horizontal scrolling & padding */
+    .table-container {
+        border-radius: 6px;
+        margin-bottom: 16px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 620px; /* Enable smooth horizontal scroll without squishing columns */
+        font-size: 0.8rem;
+    }
+
+    th, td {
+        padding: 10px 12px;
+    }
+
+    /* Modal responsiveness */
+    .modal-content {
+        margin: 12px;
+        padding: 18px;
+        max-width: calc(100vw - 24px);
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .login-box {
+        margin: 16px;
+        padding: 24px 20px;
+    }
+}
+
+/* Extra Small Phones (max-width: 480px) */
+@media (max-width: 480px) {
+    .btn {
+        padding: 7px 10px;
+        font-size: 0.8rem;
+    }
+
+    .sidebar {
+        width: 85vw;
+    }
+
+    #top-domain-badge {
+        display: inline-block;
+        max-width: 130px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: bottom;
+    }
+}
+

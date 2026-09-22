@@ -45,13 +45,19 @@
 
     <!-- SCREEN 2: MAIN DASHBOARD (SIDEBAR ADMIN LAYOUT) -->
     <div class="app-layout" id="dashboard-screen" style="display: none;">
+        <!-- Mobile Sidebar Backdrop Overlay -->
+        <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleMobileSidebar(false)"></div>
+
         <!-- Left Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="brand-title">
-                    <span>⚡ DNS Panel</span>
+        <aside class="sidebar" id="app-sidebar">
+            <div class="sidebar-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <div class="brand-title">
+                        <span>⚡ DNS Panel</span>
+                    </div>
+                    <span class="badge-isp">Dual-Node BIND9</span>
                 </div>
-                <span class="badge-isp">Dual-Node BIND9</span>
+                <button class="mobile-close-btn" onclick="toggleMobileSidebar(false)" aria-label="Tutup Menu">✕</button>
             </div>
 
             <nav class="sidebar-menu">
@@ -100,9 +106,18 @@
         <!-- Right Main Content Area -->
         <main class="main-wrapper">
             <header class="top-navbar">
-                <div class="status-indicator">
-                    <div class="dot-pulse" id="global-dot"></div>
-                    <span id="global-status-text">Memeriksa Kesehatan Node...</span>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <button class="mobile-toggle-btn" id="mobile-toggle-btn" onclick="toggleMobileSidebar(true)" aria-label="Buka Menu">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                    <div class="status-indicator">
+                        <div class="dot-pulse" id="global-dot"></div>
+                        <span id="global-status-text">Memeriksa Kesehatan Node...</span>
+                    </div>
                 </div>
                 <div style="font-size: 0.85rem; color: var(--text-secondary); font-family: monospace;">
                     Zone: <strong style="color: #60a5fa;" id="top-domain-badge">ispanda.net.id</strong>
