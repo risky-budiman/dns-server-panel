@@ -109,6 +109,45 @@ export class UserManager {
         };
     }
 
+    static updateUser({ username, fullName, role, password }) {
+        this.init();
+        const users = JSON.parse(fs.readFileSync(CONFIG.USERS_FILE, 'utf-8'));
+        const user = users.find(u => u.username.toLowerCase() === username.toLowerCase());
+        if (!user) {
+            throw new Error(`Pengguna '${username}' tidak ditemukan.`);
+        }
+
+        if (role) {
+            const validRoles = ['admin', 'operator', 'viewer'];
+            if (!validRoles.includes(role)) {
+                throw new Error(`Role tidak valid. Pilihan: ${validRoles.join(', ')}`);
+            }
+            if (username.toLowerCase() === CONFIG.ADMIN_USER.toLowerCase() && role !== 'admin') {
+                throw new Error('Role Super Admin utama tidak boleh diturunkan.');
+            }
+            user.role = role;
+        }
+
+        if (fullName !== undefined && fullName.trim().length > 0) {
+            user.fullName = fullName.trim();
+        }
+
+        if (password && password.trim().length > 0) {
+            if (password.length < 6) {
+                throw new Error('Password baru minimal 6 karakter.');
+            }
+            user.passwordHash = this.hashPassword(password);
+        }
+
+        fs.writeFileSync(CONFIG.USERS_FILE, JSON.stringify(users, null, 2));
+        return {
+            id: user.id,
+            username: user.username,
+            role: user.role,
+            fullName: user.fullName
+        };
+    }
+
     static deleteUser(username) {
         this.init();
         if (username.toLowerCase() === CONFIG.ADMIN_USER.toLowerCase()) {

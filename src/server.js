@@ -183,6 +183,32 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
+    // 4B. PUT /api/users (Update user)
+    if (req.method === 'PUT' && url.pathname === '/api/users') {
+        const session = checkAuth(req, res, ['admin']);
+        if (!session) return;
+        let body = '';
+        req.on('data', chunk => body += chunk);
+        req.on('end', () => {
+            try {
+                const { username, fullName, role, password } = JSON.parse(body);
+                const updatedUser = UserManager.updateUser({ username, fullName, role, password });
+                UserManager.logAudit({
+                    user: session.username,
+                    role: session.role,
+                    action: 'USER_UPDATED',
+                    details: `Update pengguna: ${username} (Role: ${updatedUser.role}, Nama: ${updatedUser.fullName})`
+                });
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ message: 'Data pengguna berhasil diperbarui', user: updatedUser }));
+            } catch (err) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: err.message }));
+            }
+        });
+        return;
+    }
+
     // 5. DELETE /api/users
     if (req.method === 'DELETE' && url.pathname === '/api/users') {
         const session = checkAuth(req, res, ['admin']);

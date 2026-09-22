@@ -47,46 +47,44 @@
     <div class="app-layout" id="dashboard-screen" style="display: none;">
         <!-- Left Sidebar -->
         <aside class="sidebar">
-            <div>
-                <div class="sidebar-header">
-                    <div class="brand-title">
-                        <span>⚡ DNS Panel</span>
-                    </div>
-                    <span class="badge-isp">Dual-Node BIND9</span>
+            <div class="sidebar-header">
+                <div class="brand-title">
+                    <span>⚡ DNS Panel</span>
                 </div>
-
-                <nav class="sidebar-menu">
-                    <div class="nav-category">DNS Management</div>
-                    <button class="sidebar-link active" id="tab-btn-records" onclick="switchTab('records', this)">
-                        <span>🌐</span> Authoritative Records
-                    </button>
-                    <button class="sidebar-link" id="tab-btn-zone" onclick="switchTab('zone', this)">
-                        <span>⚙️</span> Domain & Zone Settings
-                    </button>
-                    <button class="sidebar-link" id="tab-btn-blocking" onclick="switchTab('blocking', this)">
-                        <span>🛡️</span> Custom Blocking
-                    </button>
-                    <button class="sidebar-link" id="tab-btn-rpz" onclick="switchTab('rpz', this)">
-                        <span>📡</span> RPZ Kominfo Sync
-                    </button>
-
-                    <div class="nav-category">Monitoring & Infra</div>
-                    <button class="sidebar-link" id="tab-btn-metrics" onclick="switchTab('metrics', this)">
-                        <span>📊</span> System Telemetry & QPS
-                    </button>
-                    <button class="sidebar-link" id="tab-btn-provision" onclick="switchTab('provision', this)">
-                        <span>🚀</span> Secure Provisioning
-                    </button>
-
-                    <div class="nav-category">Security & Access</div>
-                    <button class="sidebar-link" id="tab-btn-users" onclick="switchTab('users', this)">
-                        <span>👥</span> User Management (RBAC)
-                    </button>
-                    <button class="sidebar-link" id="tab-btn-audit" onclick="switchTab('audit', this)">
-                        <span>📝</span> Audit Trail Logs
-                    </button>
-                </nav>
+                <span class="badge-isp">Dual-Node BIND9</span>
             </div>
+
+            <nav class="sidebar-menu">
+                <div class="nav-category">DNS Management</div>
+                <button class="sidebar-link active" id="tab-btn-records" onclick="switchTab('records', this)">
+                    <span>🌐</span> Authoritative Records
+                </button>
+                <button class="sidebar-link" id="tab-btn-zone" onclick="switchTab('zone', this)">
+                    <span>⚙️</span> Domain & Zone Settings
+                </button>
+                <button class="sidebar-link" id="tab-btn-blocking" onclick="switchTab('blocking', this)">
+                    <span>🛡️</span> Custom Blocking
+                </button>
+                <button class="sidebar-link" id="tab-btn-rpz" onclick="switchTab('rpz', this)">
+                    <span>📡</span> RPZ Kominfo Sync
+                </button>
+
+                <div class="nav-category">Monitoring & Infra</div>
+                <button class="sidebar-link" id="tab-btn-metrics" onclick="switchTab('metrics', this)">
+                    <span>📊</span> System Telemetry & QPS
+                </button>
+                <button class="sidebar-link" id="tab-btn-provision" onclick="switchTab('provision', this)">
+                    <span>🚀</span> Secure Provisioning
+                </button>
+
+                <div class="nav-category">Security & Access</div>
+                <button class="sidebar-link" id="tab-btn-users" onclick="switchTab('users', this)">
+                    <span>👥</span> User Management (RBAC)
+                </button>
+                <button class="sidebar-link" id="tab-btn-audit" onclick="switchTab('audit', this)">
+                    <span>📝</span> Audit Trail Logs
+                </button>
+            </nav>
 
             <div class="sidebar-footer">
                 <div class="user-profile-widget">
@@ -713,6 +711,37 @@
             <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
                 <button class="btn btn-secondary" onclick="closeModal('add-user-modal')">Batal</button>
                 <button class="btn btn-primary" onclick="submitCreateUser()">Buat User</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit Pengguna -->
+    <div class="modal-overlay" id="edit-user-modal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 16px; font-size: 1.1rem; font-weight: 700; color: #fbbf24;">Edit Data Pengguna</h3>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="edit-usr-username" readonly style="opacity: 0.7; cursor: not-allowed; background: rgba(255,255,255,0.05);">
+            </div>
+            <div class="form-group">
+                <label>Nama Lengkap</label>
+                <input type="text" id="edit-usr-fullname" placeholder="misal: Andi Pratama (NOC)">
+            </div>
+            <div class="form-group">
+                <label>Role / Privilege</label>
+                <select id="edit-usr-role">
+                    <option value="operator">NOC Operator (Kelola Record & RPZ Sync)</option>
+                    <option value="viewer">Auditor / Viewer (Read-Only Tanpa Aksi)</option>
+                    <option value="admin">Super Administrator (Akses Penuh)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Ganti Password Baru <span style="font-size: 0.75rem; color: var(--text-secondary); font-weight: normal;">(Kosongkan jika tidak ingin mengubah password)</span></label>
+                <input type="password" id="edit-usr-password" placeholder="•••••••• (Opsional)">
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-secondary" onclick="closeModal('edit-user-modal')">Batal</button>
+                <button class="btn btn-warning" onclick="submitEditUser()">Simpan Perubahan</button>
             </div>
         </div>
     </div>

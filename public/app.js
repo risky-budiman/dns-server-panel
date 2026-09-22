@@ -549,20 +549,80 @@ async function fetchUsers() {
         data.users.forEach(u => {
             const tr = document.createElement('tr');
             const d = new Date(u.createdAt);
-            let deleteBtn = `<button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75rem;" onclick="deleteUser('${u.username}')">Hapus</button>`;
-            if (u.username === 'admin') deleteBtn = `<span style="color: var(--text-secondary); font-size: 0.75rem;">(Master Admin)</span>`;
+            const safeFullName = encodeURIComponent(u.fullName || '');
+
+            let actionHtml = `
+                <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
+                    <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="openEditUserModal('${u.username}', '${safeFullName}', '${u.role}')">✏️ Edit</button>
+                    ${u.username === 'admin' ? 
+                        '<span style="color: var(--text-secondary); font-size: 0.75rem; margin-left: 4px;">(Master Admin)</span>' : 
+                        `<button class="btn btn-danger" style="padding: 4px 10px; font-size: 0.75rem;" onclick="deleteUser('${u.username}')">Hapus</button>`
+                    }
+                </div>
+            `;
 
             tr.innerHTML = `
                 <td style="font-weight: 600;">${u.username}</td>
                 <td>${u.fullName}</td>
                 <td><span class="role-badge ${u.role}">${u.role.toUpperCase()}</span></td>
                 <td style="font-family: monospace; font-size: 0.8rem; color: var(--text-secondary);">${d.toLocaleDateString()} ${d.toLocaleTimeString()}</td>
-                <td style="text-align: right;">${deleteBtn}</td>
+                <td style="text-align: right;">${actionHtml}</td>
             `;
             tbody.appendChild(tr);
         });
     } catch (e) {
         console.error('Failed to fetch users:', e);
+    }
+}
+
+function openEditUserModal(username, fullNameEnc, role) {
+    document.getElementById('edit-usr-username').value = username;
+    document.getElementById('edit-usr-fullname').value = decodeURIComponent(fullNameEnc);
+    const roleSelect = document.getElementById('edit-usr-role');
+    roleSelect.value = role;
+    if (username === 'admin') {
+        roleSelect.disabled = true;
+        roleSelect.title = 'Role Super Admin utama tidak dapat diubah';
+    } else {
+        roleSelect.disabled = false;
+        roleSelect.title = '';
+    }
+    document.getElementById('edit-usr-password').value = '';
+    document.getElementById('edit-user-modal').style.display = 'flex';
+}
+
+async function submitEditUser() {
+    const username = document.getElementById('edit-usr-username').value;
+    const fullName = document.getElementById('edit-usr-fullname').value.trim();
+    const role = document.getElementById('edit-usr-role').value;
+    const password = document.getElementById('edit-usr-password').value;
+
+    if (!fullName) {
+        alert('Nama lengkap tidak boleh kosong!');
+        return;
+    }
+
+    try {
+        const payload = { username, fullName, role };
+        if (password && password.trim().length > 0) {
+            payload.password = password;
+        }
+
+        const res = await fetch('/api/users', {
+            method: 'PUT',
+            headers: authHeaders(),
+            body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        if (res.ok) {
+            closeModal('edit-user-modal');
+            fetchUsers();
+        } else {
+            alert(`Gagal: ${result.error}`);
+            if (res.status === 401) handleLogout();
+        }
+    } catch (e) {
+        alert(`Error: ${e.message}`);
     }
 }
 
