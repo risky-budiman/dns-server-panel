@@ -1,5 +1,26 @@
 [
   {
+    "timestamp": "2026-09-22T22:11:22.688Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "USER_LOGIN",
+    "details": "Berhasil login ke dashboard control center"
+  },
+  {
+    "timestamp": "2026-09-22T22:09:21.737Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "USER_LOGIN",
+    "details": "Berhasil login ke dashboard control center"
+  },
+  {
+    "timestamp": "2026-09-22T22:03:59.223Z",
+    "user": "admin",
+    "role": "admin",
+    "action": "USER_LOGIN",
+    "details": "Berhasil login ke dashboard control center"
+  },
+  {
     "timestamp": "2026-09-22T21:47:52.494Z",
     "user": "admin",
     "role": "admin",
